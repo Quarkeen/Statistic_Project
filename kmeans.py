@@ -1,0 +1,126 @@
+# 1. SETUP AND DATA LOADING
+# -------------------------------------
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+import os
+
+print("--- Applying K-Means for Customer Segmentation ---")
+
+# Load the dataset
+# Make sure 'customer_segmentation.csv' is in the same folder as your script
+try:
+    df = pd.read_csv('customer_segmentation_data.csv')
+    print("Dataset loaded successfully!")
+except FileNotFoundError:
+    print("Error: 'customer_segmentation.csv' not found.")
+    print("Please download the dataset and place it in the same directory as the script.")
+    exit()
+
+# 2. DATA PREPROCESSING
+# -------------------------------------
+# Select the features for clustering
+features = ['income', 'purchase_frequency', 'last_purchase_amount']
+X = df[features]
+
+# Scale the data to ensure all features contribute equally
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+print("Data has been preprocessed and scaled.\n")
+
+
+# 3. K-MEANS CLUSTERING APPLICATION
+# -------------------------------------
+# --- IMPORTANT ---
+# This script now reads the optimal_k value from a file.
+# Ensure your gap_statistic.py script saves its result to 'kvalue/optimal_k.txt'
+k_value_file = os.path.join('kvalue', 'optimal_k.txt')
+
+try:
+    with open(k_value_file, 'r') as f:
+        optimal_k = int(f.read().strip())
+    print(f"Successfully read optimal k = {optimal_k} from '{k_value_file}'")
+except (FileNotFoundError, ValueError):
+    print(f"Error: Could not read the optimal k value from '{k_value_file}'.")
+    print("Please run your gap_statistic.py script first to generate this file.")
+    exit()
+
+print(f"\nApplying K-Means algorithm with k = {optimal_k}...")
+
+# Initialize and fit the K-Means model
+kmeans = KMeans(n_clusters=optimal_k, init='k-means++', n_init=10, random_state=42)
+cluster_labels = kmeans.fit_predict(X_scaled)
+
+# Add the resulting cluster labels back to the original DataFrame
+df['cluster'] = cluster_labels
+print("K-Means applied and cluster labels have been assigned.\n")
+
+
+# 4. PROFILING AND LABELING THE SEGMENTS
+# -------------------------------------
+# This is a crucial step for interpreting the results.
+print("--- Customer Segment Profiles (including sample counts and labels) ---")
+segment_profiles = df.groupby('cluster')[features].mean()
+segment_profiles['sample_count'] = df.groupby('cluster').size()
+
+# --- NEW: Automated Labeling Logic ---
+# Calculate overall averages to use as a baseline for high/low comparison
+overall_avg_income = df['income'].mean()
+overall_avg_freq = df['purchase_frequency'].mean()
+overall_avg_amount = df['last_purchase_amount'].mean()
+
+def assign_label(row):
+    """Assigns a descriptive label to a cluster based on its profile."""
+    income_level = "High" if row['income'] > overall_avg_income else "Low"
+    freq_level = "High" if row['purchase_frequency'] > overall_avg_freq else "Low"
+    amount_level = "High" if row['last_purchase_amount'] > overall_avg_amount else "Low"
+
+    # Define rules for labeling based on the feature levels
+    if income_level == "High" and freq_level == "High":
+        return "VIP / High-Value Loyalist"
+    elif income_level == "High" and freq_level == "Low":
+        if amount_level == "High":
+            return "High-Income, Big Spender"
+        else:
+            return "High-Income, Low-Engagement"
+    elif income_level == "Low" and freq_level == "High":
+        if amount_level == "High":
+            return "Frequent Spender (Mid-Value)"
+        else:
+            return "Frequent Bargain Hunter"
+    elif income_level == "Low" and freq_level == "Low":
+        if amount_level == "High":
+            return "Occasional Spender"
+        else:
+            return "At-Risk / Lapsed Customer"
+    return "General" # A fallback label
+
+# Apply the labeling function to create the new 'label' column
+segment_profiles['label'] = segment_profiles.apply(assign_label, axis=1)
+
+print(segment_profiles)
+
+print("\n--- How to Interpret the Profiles ---")
+print("The 'label' column now gives a human-readable persona for each segment, making it easy to devise marketing strategies.")
+
+
+# 5. VISUALIZING THE CLUSTERS
+# -------------------------------------
+print("\nGenerating 3D scatter plot of the clusters...")
+
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+# Create a scatter plot for each cluster
+scatter = ax.scatter(X_scaled[:, 0], X_scaled[:, 1], X_scaled[:, 2], 
+                     c=df['cluster'], cmap='viridis', s=50)
+
+# Labeling the axes and title
+ax.set_title(f'K-Means Clustering (k={optimal_k})')
+ax.set_xlabel(f'Scaled {features[0]}')
+ax.set_ylabel(f'Scaled {features[1]}')
+ax.set_zlabel(f'Scaled {features[2]}')
+plt.legend(*scatter.legend_elements(), title='Clusters')
+plt.show()
+
