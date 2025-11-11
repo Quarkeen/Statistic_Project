@@ -51,24 +51,6 @@ print(f"\nAnalysis complete. The new dataset with FM scores has been saved as '{
 print("\nGenerating visualizations to interpret the FM segments...")
 sns.set(style="whitegrid")
 
-# # --- Plot 1: Distribution of F and M Scores ---
-# fig, axes = plt.subplots(1, 2, figsize=(15, 6))
-# fig.suptitle('Distribution of Customer Scores (Equal-Sized Bins)', fontsize=16)
-
-# # Frequency Score Distribution
-# sns.countplot(ax=axes[0], x='F_Score', data=df, palette='viridis')
-# axes[0].set_title('Frequency Scores (F_Score)')
-# axes[0].set_xlabel('Score (1=Low, 5=High)')
-# axes[0].set_ylabel('Number of Customers')
-
-# # Monetary Score Distribution
-# sns.countplot(ax=axes[1], x='M_Score', data=df, palette='plasma')
-# axes[1].set_title('Monetary Scores (M_Score)')
-# axes[1].set_xlabel('Score (1=Low, 5=High)')
-# axes[1].set_ylabel('Number of Customers')
-
-# plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-# plt.show()
 
 
 # --- Plot 2: FM Segmentation Heatmap (More Intuitive) ---

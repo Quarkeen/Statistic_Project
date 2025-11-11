@@ -53,6 +53,8 @@ plt.xlabel('Number of clusters (k)')
 plt.ylabel('WCSS')
 plt.legend()
 plt.grid(True)
+plt.savefig('elbow_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('elbow_plot.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
 print(f"The Elbow Method suggests the optimal k is: {elbow_k}\n")

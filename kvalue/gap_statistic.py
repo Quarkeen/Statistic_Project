@@ -101,6 +101,8 @@ plt.xlabel('Number of clusters (k)')
 plt.ylabel('Gap Value')
 plt.legend()
 plt.grid(True)
+plt.savefig('gap_statistic_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('gap_statistic_plot.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
 # 4. FINAL OUTPUT

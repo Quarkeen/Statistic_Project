@@ -8,33 +8,30 @@ import os
 
 print("--- Applying K-Means for Customer Segmentation ---")
 
-# Load the dataset
-# Make sure 'customer_segmentation.csv' is in the same folder as your script
+# --- UPDATED: Load the file that contains ALL columns, including FM scores ---
 try:
-    df = pd.read_csv('customer_segmentation_data.csv')
-    print("Dataset loaded successfully!")
+    df = pd.read_csv('/home/quark/stats2/RFM/behavioral_customer_data.csv')
+    print("Dataset with all features (raw + FM scores) loaded successfully!")
 except FileNotFoundError:
-    print("Error: 'customer_segmentation.csv' not found.")
-    print("Please download the dataset and place it in the same directory as the script.")
+    print("Error: 'behavioral_customer_data.csv' not found.")
+    print("Please run the 'rfm_analysis.py' script first to generate this file.")
     exit()
 
 # 2. DATA PREPROCESSING
 # -------------------------------------
-# Select the features for clustering
+# Select the features for clustering (This logic is UNCHANGED)
 features = ['income', 'purchase_frequency', 'last_purchase_amount']
 X = df[features]
 
 # Scale the data to ensure all features contribute equally
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
-print("Data has been preprocessed and scaled.\n")
+print("Data has been preprocessed and scaled (based on income, frequency, amount).\n")
 
 
 # 3. K-MEANS CLUSTERING APPLICATION
 # -------------------------------------
-# --- IMPORTANT ---
-# This script now reads the optimal_k value from a file.
-# Ensure your gap_statistic.py script saves its result to 'kvalue/optimal_k.txt'
+# This logic is UNCHANGED
 k_value_file = os.path.join('kvalue', 'optimal_k.txt')
 
 try:
@@ -48,7 +45,7 @@ except (FileNotFoundError, ValueError):
 
 print(f"\nApplying K-Means algorithm with k = {optimal_k}...")
 
-# Initialize and fit the K-Means model
+# Initialize and fit the K-Means model (This logic is UNCHANGED)
 kmeans = KMeans(n_clusters=optimal_k, init='k-means++', n_init=10, random_state=42)
 cluster_labels = kmeans.fit_predict(X_scaled)
 
@@ -61,11 +58,16 @@ print("K-Means applied and cluster labels have been assigned.\n")
 # -------------------------------------
 # This is a crucial step for interpreting the results.
 print("--- Customer Segment Profiles (including sample counts and labels) ---")
-segment_profiles = df.groupby('cluster')[features].mean()
+
+# --- UPDATED: Define all features you want to see in the profile table ---
+profile_features = ['income', 'purchase_frequency', 'last_purchase_amount', 'F_Score', 'M_Score']
+
+# Calculate the mean for the profile features
+segment_profiles = df.groupby('cluster')[profile_features].mean()
 segment_profiles['sample_count'] = df.groupby('cluster').size()
 
-# --- NEW: Automated Labeling Logic ---
-# Calculate overall averages to use as a baseline for high/low comparison
+# --- Automated Labeling Logic (This logic is UNCHANGED) ---
+# It still bases the label on the original features
 overall_avg_income = df['income'].mean()
 overall_avg_freq = df['purchase_frequency'].mean()
 overall_avg_amount = df['last_purchase_amount'].mean()
@@ -99,14 +101,21 @@ def assign_label(row):
 # Apply the labeling function to create the new 'label' column
 segment_profiles['label'] = segment_profiles.apply(assign_label, axis=1)
 
+# Set Pandas options to display all columns
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
 print(segment_profiles)
 
-print("\n--- How to Interpret the Profiles ---")
-print("The 'label' column now gives a human-readable persona for each segment, making it easy to devise marketing strategies.")
+# --- ADDED: Map labels back to the main DataFrame ---
+# This is needed so the final CSV has the human-readable labels
+label_map = segment_profiles['label'].to_dict()
+df['label'] = df['cluster'].map(label_map)
+print("\nHuman-readable labels have been assigned to all customers in the DataFrame.")
 
 
 # 5. VISUALIZING THE CLUSTERS
 # -------------------------------------
+# This logic is UNCHANGED
 print("\nGenerating 3D scatter plot of the clusters...")
 
 fig = plt.figure(figsize=(12, 9))
@@ -122,5 +131,17 @@ ax.set_xlabel(f'Scaled {features[0]}')
 ax.set_ylabel(f'Scaled {features[1]}')
 ax.set_zlabel(f'Scaled {features[2]}')
 plt.legend(*scatter.legend_elements(), title='Clusters')
+
+# --- Save the plot as a high-quality file ---
+plt.savefig('kmeans_raw_features_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('kmeans_raw_features_plot.pdf', format='pdf', bbox_inches='tight')
+print(f"Plot saved as 'kmeans_raw_features_plot.png'")
+
 plt.show()
 
+
+# 6. --- NEW: SAVE THE FINAL, SEGMENTED DATASET ---
+# -------------------------------------
+output_filename = 'kmeans_segmented_customers.csv'
+df.to_csv(output_filename, index=False)
+print(f"\nFinal, labeled dataset (from K-Means) saved as '{output_filename}'")

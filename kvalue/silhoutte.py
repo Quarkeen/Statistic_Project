@@ -48,6 +48,8 @@ plt.xlabel('Number of clusters (k)')
 plt.ylabel('Average Silhouette Score')
 plt.legend()
 plt.grid(True)
+plt.savefig('silhouette_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('silhouette_plot.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
 print(f"The Silhouette Method suggests the optimal k is: {silhouette_k}\n")
