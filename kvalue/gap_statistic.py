@@ -105,15 +105,9 @@ plt.savefig('gap_statistic_plot.png', dpi=300, bbox_inches='tight')
 plt.savefig('gap_statistic_plot.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
-# 4. FINAL OUTPUT
-# -------------------------------------
 
 
 
-# 5. EXPORTING THE OPTIMAL K VALUE
-# -------------------------------------
-# Since this script is already inside the 'kvalue' directory,
-# we can write the output file directly to the current location.
 
 
 

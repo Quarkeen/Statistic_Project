@@ -118,7 +118,7 @@ print("\n--- Human-Readable IF-THEN Rules ---")
 rules = export_text(
     dt_classifier,
     feature_names=fm_features,
-    class_names=class_names_list  # <-- UPDATED: Use combined names
+    class_names=class_names_list 
 )
 print(rules)
 # 7. VISUALIZE THE DECISION TREE RULES
@@ -130,7 +130,7 @@ plot_tree(
     filled=True,
     rounded=True,
     feature_names=fm_features,
-    class_names=class_names_list  # <-- UPDATED: Use combined names
+    class_names=class_names_list  
 )
 plt.title(f"Decision Tree Rules for Explaining {optimal_k} Clusters (FM Features)", fontsize=20)
 plt.savefig('decision_tree_plot.png', dpi=300, bbox_inches='tight')

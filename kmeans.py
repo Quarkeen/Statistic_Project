@@ -58,16 +58,11 @@ print("K-Means applied and cluster labels have been assigned.\n")
 # -------------------------------------
 # This is a crucial step for interpreting the results.
 print("--- Customer Segment Profiles (including sample counts and labels) ---")
-
-# --- UPDATED: Define all features you want to see in the profile table ---
 profile_features = ['income', 'purchase_frequency', 'last_purchase_amount', 'F_Score', 'M_Score']
 
 # Calculate the mean for the profile features
 segment_profiles = df.groupby('cluster')[profile_features].mean()
 segment_profiles['sample_count'] = df.groupby('cluster').size()
-
-# --- Automated Labeling Logic (This logic is UNCHANGED) ---
-# It still bases the label on the original features
 overall_avg_income = df['income'].mean()
 overall_avg_freq = df['purchase_frequency'].mean()
 overall_avg_amount = df['last_purchase_amount'].mean()
@@ -139,9 +134,6 @@ print(f"Plot saved as 'kmeans_raw_features_plot.png'")
 
 plt.show()
 
-
-# 6. --- NEW: SAVE THE FINAL, SEGMENTED DATASET ---
-# -------------------------------------
 output_filename = 'kmeans_segmented_customers.csv'
 df.to_csv(output_filename, index=False)
 print(f"\nFinal, labeled dataset (from K-Means) saved as '{output_filename}'")

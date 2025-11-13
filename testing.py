@@ -106,29 +106,7 @@ report_df = pd.DataFrame(report_data)
 print(report_df.to_string(index=False))
 
 
-# 7. CONCLUSIVE SUMMARY
-# -------------------------------------
-# print("\n--- Conclusive Summary ---")
-# print("Based on the analysis, the 'best' algorithm depends entirely on the business objective:\n")
-
-# print("1. K-Means: BEST FOR GENERAL-PURPOSE MARKETING SEGMENTATION")
-# print("   - Why: It produced balanced clusters with the highest Silhouette Score, indicating high-quality, well-defined groups.")
-# print("   - Use Case: Creating a small number of distinct, actionable customer personas (e.g., 'VIPs', 'At-Risk') for targeted campaigns. Its results are stable and easy to interpret.\n")
-
-# print("2. Hierarchical Clustering: BEST FOR VISUALIZING RELATIONSHIPS")
-# print("   - Why: While its Silhouette Score was slightly lower, its main strength is the dendrogram, which visually explains how segments are related.")
-# print("   - Use Case: Understanding the nested structure of the customer base. It provides similar personas to K-Means but with added visual context.\n")
-
-# print("3. DBSCAN: BEST FOR ANOMALY DETECTION AND FINDING NICHE GROUPS")
-# print("   - Why: This algorithm is not designed for partitioning the entire dataset. Its strength is in automatically identifying what is 'normal' and what is an 'outlier'.")
-# print("   - Use Case: Identifying customers with highly unusual behavior for fraud detection, or finding small, hyper-specific niche segments that other algorithms would miss.\n")
-
-# print("--- FINAL RECOMMENDATION ---")
-# print(f"For your project's goal of creating the most 'meaningful and useful customer segments' for marketing, **K-Means is the recommended algorithm**.")
-# print("It provides the most statistically sound and balanced segments, which are ideal for building a clear and actionable segmentation strategy.")
-
-
-# 8. VISUAL COMPARISON OF SILHOUETTE SCORES
+# 7. VISUAL COMPARISON OF SILHOUETTE SCORES
 # -------------------------------------
 print("\nGenerating visual comparison of algorithm performance...")
 

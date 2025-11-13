@@ -22,9 +22,6 @@ except FileNotFoundError:
 print("\nPerforming FM analysis to create behavior-based features...")
 print("Note: The dataset lacks a date column, so a true 'Recency' score cannot be calculated.")
 
-# --- FIX: Use only available behavioral features for scoring ---
-# Frequency: Higher 'purchase_frequency' is better.
-# Monetary: Higher 'last_purchase_amount' is better.
 df['Frequency'] = df['purchase_frequency']
 df['Monetary'] = df['last_purchase_amount']
 
