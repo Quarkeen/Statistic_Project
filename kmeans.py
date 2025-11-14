@@ -128,8 +128,8 @@ ax.set_zlabel(f'Scaled {features[2]}')
 plt.legend(*scatter.legend_elements(), title='Clusters')
 
 # --- Save the plot as a high-quality file ---
-plt.savefig('kmeans_raw_features_plot.png', dpi=300, bbox_inches='tight')
-plt.savefig('kmeans_raw_features_plot.pdf', format='pdf', bbox_inches='tight')
+plt.savefig('plots/kmeans_raw_features_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('plots/kmeans_raw_features_plot.pdf', format='pdf', bbox_inches='tight')
 print(f"Plot saved as 'kmeans_raw_features_plot.png'")
 
 plt.show()

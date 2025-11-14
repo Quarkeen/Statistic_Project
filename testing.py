@@ -126,7 +126,7 @@ for bar in bars:
     plt.text(bar.get_x() + bar.get_width()/2.0, yval, f'{yval:.4f}', va='bottom' if yval > 0 else 'top')
 
 plt.grid(axis='y', linestyle='--')
-plt.savefig('comparison.png', dpi=300, bbox_inches='tight')
-plt.savefig('comparison.pdf', format='pdf', bbox_inches='tight')
+plt.savefig('plots/comparison.png', dpi=300, bbox_inches='tight')
+plt.savefig('plots/comparison.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 

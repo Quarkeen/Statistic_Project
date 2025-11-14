@@ -133,7 +133,7 @@ plot_tree(
     class_names=class_names_list  
 )
 plt.title(f"Decision Tree Rules for Explaining {optimal_k} Clusters (FM Features)", fontsize=20)
-plt.savefig('decision_tree_plot.png', dpi=300, bbox_inches='tight')
-plt.savefig('decision_tree_plot.pdf', format='pdf', bbox_inches='tight')
+plt.savefig('plots/decision_tree_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('plots/decision_tree_plot.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
