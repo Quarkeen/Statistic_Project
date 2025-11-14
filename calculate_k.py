@@ -13,7 +13,7 @@ print("--- Customer Segmentation: Finding the Optimal K ---")
 # Load the dataset
 # Make sure 'customer_segmentation.csv' is in the same folder as your script
 try:
-    df = pd.read_csv('customer_segmentation_data.csv')
+    df = pd.read_csv('dataset/customer_segmentation_data.csv')
     print("Dataset loaded successfully!")
 except FileNotFoundError:
     print("Error: 'customer_segmentation.csv' not found.")

@@ -10,7 +10,7 @@ print("--- Behavioral Feature Engineering (Frequency-Monetary) Script ---")
 
 # Load the original dataset
 try:
-    df = pd.read_csv('../customer_segmentation_data.csv')
+    df = pd.read_csv('../dataset/customer_segmentation_data.csv')
     print("Original dataset loaded successfully!")
 except FileNotFoundError:
     print("Error: 'customer_segmentation.csv' not found.")

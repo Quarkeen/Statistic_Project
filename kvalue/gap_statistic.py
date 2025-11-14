@@ -12,7 +12,7 @@ print("--- Running Gap Statistic for Optimal K ---")
 try:
     # Since this script is inside the 'kvalue' directory, we look for the CSV
     # in the parent directory using '../'
-    df = pd.read_csv('../customer_segmentation_data.csv')
+    df = pd.read_csv('../dataset/customer_segmentation_data.csv')
     print("Dataset loaded successfully!")
 except FileNotFoundError:
     print("Error: 'customer_segmentation.csv' not found in the parent directory.")

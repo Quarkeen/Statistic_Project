@@ -19,7 +19,6 @@ except FileNotFoundError:
 
 # 2. DATA PREPROCESSING
 # -------------------------------------
-# Select the features for clustering (This logic is UNCHANGED)
 features = ['income', 'purchase_frequency', 'last_purchase_amount']
 X = df[features]
 
@@ -31,7 +30,6 @@ print("Data has been preprocessed and scaled (based on income, frequency, amount
 
 # 3. K-MEANS CLUSTERING APPLICATION
 # -------------------------------------
-# This logic is UNCHANGED
 k_value_file = os.path.join('kvalue', 'optimal_k.txt')
 
 try:
@@ -101,7 +99,6 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 1000)
 print(segment_profiles)
 
-# --- ADDED: Map labels back to the main DataFrame ---
 # This is needed so the final CSV has the human-readable labels
 label_map = segment_profiles['label'].to_dict()
 df['label'] = df['cluster'].map(label_map)
